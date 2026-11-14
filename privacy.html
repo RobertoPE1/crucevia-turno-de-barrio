@@ -1,20 +1,28 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crucevia — Storage and platform privacy</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crucevia — Saves and platform privacy</title>
 <style>body{max-width:680px;margin:32px auto;padding:16px;font:16px/1.6 system-ui;color:#243b37;background:#fff7e7}a{color:#235c90}</style></head><body>
-<h1>Storage and platform privacy</h1>
-<p>Crucevia stores only a numeric best score under <code>crucevia-record</code>
-in this browser's local storage. The game does not send that score to its developer.
-You can remove it by clearing this game's site data in your browser. The game
-remains playable when storage is unavailable.</p>
-<p>This build loads the official CrazyGames SDK from <code>sdk.crazygames.com</code>.
-It reports when gameplay starts and stops. Loading the SDK also makes a network
-connection to CrazyGames. Platform data processing and privacy choices are described
-in the <a href="https://www.crazygames.com/privacy-policy" target="_blank" rel="noopener noreferrer">CrazyGames Privacy Policy</a>.</p>
-<p>The game's own code adds no account system, contact forms, chat, advertising
-requests, purchases, or separate analytics service. This notice describes the
-game code; it does not claim that the CrazyGames platform processes no data.</p>
-<p>For developer identification and support, use the developer information provided
-in the game's listing on CrazyGames. A standalone publisher must supply its own
-applicable identification and contact information.</p>
+<h1>Saves and platform privacy</h1>
+<p>Crucevia saves completed districts, stars, best scores and a checkpoint of the
+current shift under <code>crucevia-campaign-v2</code>. The checkpoint includes
+the stage, timer, lives, signals, vehicle/pedestrian positions and counters.
+There are no names, messages or contact details in that save.</p>
+<p>On CrazyGames, the game uses the official SDK Data module. According to
+<a href="https://docs.crazygames.com/sdk/data/" target="_blank" rel="noopener noreferrer">CrazyGames documentation</a>,
+guest saves are stored in the browser and signed-in saves can sync to the
+platform account. Sync depends on the platform and network; the game does not
+promise immediate synchronization. If Progress Save is unavailable, the game
+shows a warning and keeps progress only for the current session.</p>
+<p>Outside CrazyGames, if SDK storage is unavailable, the game uses local browser
+storage. You can remove local saves by clearing this game's site data; platform
+account data is managed through CrazyGames. The previous numeric best score
+may be imported once from <code>crucevia-record</code> when no campaign save exists.</p>
+<p>The SDK is loaded from <code>sdk.crazygames.com</code> and reports when gameplay
+starts/stops. Loading it makes a network connection to CrazyGames. Read the
+<a href="https://www.crazygames.com/privacy-policy" target="_blank" rel="noopener noreferrer">CrazyGames Privacy Policy</a>
+for platform processing and privacy choices.</p>
+<p>The game's own code adds no account system, forms, chat, ad requests, purchases
+or separate analytics service. This notice does not claim the platform processes
+no data. For developer identification/support, use the game's CrazyGames listing.
+A standalone publisher must supply its applicable identification/contact details.</p>
 <p>Updated 14 November 2026.</p>
 </body></html>

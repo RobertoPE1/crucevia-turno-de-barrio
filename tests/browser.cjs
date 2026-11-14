@@ -8,7 +8,7 @@ const http=require('node:http');
 const liveSDK=process.argv.includes('--live-sdk');
 const server=http.createServer((request,response)=>{
   const requested=request.url.split('?')[0];
-  const name=({'/platform.js':'platform.js','/privacy.html':'privacy.html','/NOTICE.txt':'NOTICE.txt'})[requested]||'index.html';
+  const name=({'/platform.js':'platform.js','/game.js':'game.js','/campaign.js':'campaign.js','/privacy.html':'privacy.html','/NOTICE.txt':'NOTICE.txt'})[requested]||'index.html';
   response.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':'text/html; charset=utf-8');
   response.end(fs.readFileSync(path.join(__dirname,'..',name)));
 });
@@ -37,7 +37,7 @@ let socket;
   if(!liveSDK){
     await send('Network.enable');
     await send('Network.setBlockedURLs',{urls:['https://sdk.crazygames.com/*']});
-    await send('Page.addScriptToEvaluateOnNewDocument',{source:"window.sdkEvents=[];window.CrazyGames={SDK:{init:async()=>window.sdkEvents.push('init'),game:{gameplayStart:()=>window.sdkEvents.push('start'),gameplayStop:()=>window.sdkEvents.push('stop')}}};"});
+    await send('Page.addScriptToEvaluateOnNewDocument',{source:"window.sdkEvents=[];window.CrazyGames={SDK:{init:async()=>window.sdkEvents.push('init'),data:{getItem:k=>localStorage.getItem('qa-sdk:'+k),setItem:(k,v)=>localStorage.setItem('qa-sdk:'+k,v)},game:{gameplayStart:()=>window.sdkEvents.push('start'),gameplayStop:()=>window.sdkEvents.push('stop')}}};"});
   }
   await send('Page.addScriptToEvaluateOnNewDocument',{source:'window.requestAnimationFrame=cb=>{window.qaFrame=cb;return 1};'});
   const started=Date.now();
@@ -63,12 +63,20 @@ let socket;
   assert.ok(controls.bottom<=568);assert.ok(controls.height>50);
   await evaluate("document.getElementById('pause').click();for(let n=0;n<6000;n++){if(n%150===0)document.getElementById(['ns','ew','walk'][Math.floor(n/150)%3]).click();window.qaFrame(n*20);}");
   assert.equal(await evaluate("document.getElementById('overlay').classList.contains('hidden')"),false);
-  assert.match(await evaluate("document.getElementById('ot').textContent"),/Shift (over|complete!)/);
+  assert.match(await evaluate("document.getElementById('ot').textContent"),/Shift incomplete|District complete!/);
+  const passed=await evaluate("document.getElementById('ot').textContent==='District complete!'");
   await evaluate("document.getElementById('start').click()");
-  assert.equal(await evaluate("document.getElementById('time').textContent"),'90');
+  assert.equal(await evaluate("document.getElementById('time').textContent"),passed?'50':'45');
   assert.equal(await evaluate("document.getElementById('score').textContent"),'0');
   const shot=await send('Page.captureScreenshot',{format:'png'});
   fs.writeFileSync(path.join(profile,'game-mobile.png'),Buffer.from(shot.data,'base64'));
+  await evaluate("for(let n=0;n<100;n++)window.qaFrame(130000+n*20);document.getElementById('pause').click()");
+  const savedTime=await evaluate("document.getElementById('time').textContent");
+  await send('Page.reload');
+  for(let n=0;n<150;n++){if(await evaluate("document.getElementById('start')?.textContent==='Resume saved shift'"))break;await new Promise(r=>setTimeout(r,50));}
+  assert.equal(await evaluate("document.getElementById('start').textContent"),'Resume saved shift');
+  await evaluate("document.getElementById('start').click()");
+  assert.equal(await evaluate("document.getElementById('time').textContent"),savedTime);
   assert.deepEqual(errors,[]);
   console.log('PASS: Edge load <20s, desktop/mobile layout, pause/resume, simulated full session, replay, no JS exceptions.');
   console.log('Screenshots: '+profile);

@@ -32,6 +32,13 @@ generados con IA; su protección depende de la ley y de la aportación humana.
 
 ## Identidad del juego
 
+La ampliación de campaña añade ocho distritos, objetivos propios, estrellas,
+desbloqueos y guardados en campaign.js/game.js, escritos para este proyecto con
+asistencia de IA. Los escenarios de mercado, escuela, clínica, estación, festival,
+puerto, lluvia y noche se dibujan con geometría local.
+No se han descargado mapas, niveles ni paquetes artísticos para esta ampliación.
+El módulo Data que proporciona la persistencia en CrazyGames pertenece al SDK.
+
 Se conserva el nombre provisional y la presentación de barrio, la gestión de
 tres fases, la prioridad de ambulancias y peatones y los turnos de 90 segundos.
 Estos rasgos describen esta versión: no se afirma haber inventado el género

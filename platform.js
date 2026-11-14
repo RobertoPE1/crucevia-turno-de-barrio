@@ -9,7 +9,24 @@
       reported=playing;
     }catch(error){console.warn('Crucevia platform event unavailable.',error);}
   }
-  const api={setPlaying(value){playing=Boolean(value);report();},get status(){return status;}};
+  const hosted=typeof location!=='undefined'&&/(^|\.)crazygames\.com$/i.test(location.hostname);
+  const api={
+    setPlaying(value){playing=Boolean(value);report();},
+    get status(){return status;},
+    get storageMode(){return sdk?.data?'platform':hosted?'unavailable':'local';},
+    getItem(key){
+      if(status==='initializing')throw Error('Storage is still loading');
+      if(sdk?.data)return sdk.data.getItem(key);
+      if(hosted)throw Error('CrazyGames Progress Save is unavailable');
+      return localStorage.getItem(key);
+    },
+    setItem(key,value){
+      if(status==='initializing')throw Error('Storage is still loading');
+      if(sdk?.data){sdk.data.setItem(key,value);return;}
+      if(hosted)throw Error('CrazyGames Progress Save is unavailable');
+      localStorage.setItem(key,value);
+    }
+  };
   window.CruceviaPlatform=api;
   api.ready=new Promise(resolve=>{
     let finished=false;

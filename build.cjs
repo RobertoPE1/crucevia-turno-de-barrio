@@ -1,6 +1,6 @@
 // Dependency-free ZIP builder: node build.cjs
 const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib');
-const files=['index.html','platform.js','privacy.html','NOTICE.txt'];
+const files=['index.html','platform.js','campaign.js','game.js','privacy.html','NOTICE.txt'];
 function crc32(data){let c=0xffffffff;for(const b of data){c^=b;for(let i=0;i<8;i++)c=(c>>>1)^((c&1)?0xedb88320:0);}return(c^0xffffffff)>>>0;}
 const local=[],directory=[];let offset=0;
 for(const name of files){

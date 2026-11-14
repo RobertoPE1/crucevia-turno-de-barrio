@@ -1,53 +1,77 @@
 CRUCEVIA — NEIGHBORHOOD SHIFT
-English HTML5 traffic-management game for CrazyGames Basic Launch.
-Serve this folder over HTTP (for example through XAMPP). No npm build is needed.
-index.html uses platform.js and the official, remotely hosted CrazyGames SDK v3.
-No third-party image, sound or font files are bundled.
+Eight-district English HTML5 campaign for CrazyGames Basic Launch.
+Serve the folder over HTTP, for example through XAMPP. No npm build is needed.
+The game uses platform.js, campaign.js, game.js and the remotely hosted official
+CrazyGames SDK v3. Graphics are drawn in code; no third-party art/audio is bundled.
 
-GOAL AND CONTROLS
-Survive a 90-second shift with at least one of your 3 lives remaining.
-Buttons/touch or keys 1 (north–south), 2 (east–west), 3 (pedestrians).
-Space pauses/resumes. Losing focus pauses the shift; resume with the button.
-Let cars clear the intersection before opening another direction.
-Ambulances can wait 8 seconds; other drivers and pedestrians 18 seconds.
-Cars earn 1 point, ambulances 4 points, and pedestrians 2 points.
-Collisions and excessive waiting cost lives.
+CAMPAIGN
+Complete each shift with lives remaining AND all its score/service targets.
+Finish districts in order to unlock the next one. Replay unlocked districts.
+1. Market Morning: 45s, 10 points.
+2. School Crossing: 50s, 14 points, 4 pedestrians.
+3. Clinic Call: 55s, 18 points, 3 ambulances.
+4. Station Rush: 60s, 24 points, 10 regular cars.
+5. Park Festival: 60s, 26 points, 8 pedestrians.
+6. Harbor Freight: 70s, 32 points, 16 regular cars.
+7. Rainy Avenues: 75s, 32 points, 8 cars and 6 pedestrians, slower wet roads.
+8. Night Connection: 90s, 48 points, 12 cars, 8 pedestrians, 4 ambulances.
+Earn 1 star for passing, 2 with at least 2 lives, or 3 with all lives and no collisions.
+A defeat preserves all previously earned stars/unlocks. Best results never decrease.
 
-CRAZYGAMES BASIC INTEGRATION
-The adapter awaits SDK.init before reporting gameplayStart/gameplayStop.
-Start/replay/resume report start; pause, focus loss and game end report stop.
-Menus do not report active gameplay. Duplicate events are suppressed.
-The game stays playable if SDK loading/init fails or exceeds five seconds.
-No ads, accounts, purchases, external game links or fullscreen buttons are added.
-This is a Basic Launch integration, not certification of Full Launch compliance.
-SDK documentation: https://docs.crazygames.com/sdk/intro/
-Requirements: https://docs.crazygames.com/requirements/technical/
+CONTROLS
+Buttons/touch or 1 (north–south), 2 (east–west), 3 (pedestrians).
+Space pauses/resumes. Map opens district selection. Focus loss pauses the shift.
+Let cars clear the intersection before changing directions.
+Ambulances can wait 8 seconds; regular cars and pedestrians 18 seconds.
+Regular cars earn 1 point, ambulances 4, pedestrians 2.
 
-STORAGE AND RIGHTS
-The best score stays in local storage when available; no score upload is added.
-See privacy.html for the storage/platform notice.
-See RIGHTS.md for the evidence, asset inventory and unresolved ownership checks.
-See NOTICE.txt for the distribution notice. No open-source license is granted.
-Do not declare worldwide uniqueness, trademark clearance or human-only authorship.
+SAVES
+A checkpoint is written when starting, every 5 seconds of gameplay, when pausing,
+opening the map, hiding/leaving the page and when finishing a district.
+Resume saved shift restores the timer, score, lives and traffic state.
+Only one unfinished shift is stored: starting another district replaces it.
+On CrazyGames, only the SDK Data module is used for campaign persistence.
+In submission settings, select Progress Save:
+"Yes, using the Data Module from the CrazyGames SDK".
+If it is disabled, the game warns that saving is unavailable rather than silently
+substituting a browser-local save. The game remains playable in memory.
+Outside CrazyGames the fallback is localStorage when SDK Data is unavailable.
+Signed-in cross-device sync is provided by CrazyGames, not independently verified
+on two accounts/devices here. Guest saves are browser-local according to the SDK.
+Old best scores are imported once; existing campaign progress takes precedence.
+A closed tab may lose up to the last checkpoint if the browser cannot flush writes.
+See privacy.html and https://docs.crazygames.com/sdk/data/
 
-AUTOMATED CHECKS (Node.js)
+PLATFORM
+SDK.init completes before gameplay/data methods. Start/resume report gameplayStart;
+pause/focus loss/map/results report gameplayStop. Menus do not count as gameplay.
+No ads, accounts, purchases, game promotion or custom fullscreen button is added.
+The 50 MB requirement is a MAXIMUM initial download, never a minimum.
+Basic integration is not certification of Full Launch compliance.
+https://docs.crazygames.com/requirements/technical/
+
+CHECKS
 node tests/smoke.cjs
+node tests/balance.cjs
 node tests/platform.cjs
 node tests/browser.cjs
 node tests/browser.cjs --live-sdk
-Browser tests require Windows and Microsoft Edge. They use a temporary profile
-and a loopback HTTP server. Default mode mocks the SDK for deterministic event
-checks; --live-sdk loads and initializes the real official SDK on localhost.
-Test sizes: 1280x800, 907x510, 821x462, 800x450, 390x844 and 320x568.
-The tests cover loading, layout, pause/replay, session end and JS exceptions.
-Actual Chrome, iOS, Android and an independent human playthrough remain required.
+Browser checks require Windows/Edge. Default uses a mocked SDK Data store;
+--live-sdk checks the real official SDK on localhost.
+Checks cover goals/unlocks, stars, invalid saves, pause, failed storage,
+reload/resume, SDK ordering, layout and JS exceptions. The balance check simulates
+all eight districts with a priority strategy to verify every goal is reachable.
+Real Chrome, iOS/Android and an independent human playthrough remain required.
 
-BUILD AND SUBMIT
-Run: node build.cjs
-Upload release/crucevia-crazygames.zip to the CrazyGames developer portal.
-The ZIP contains only index.html, platform.js, privacy.html and NOTICE.txt,
-with index.html at the ZIP root. It excludes Git metadata, tests and build tools.
-The official SDK remains externally hosted; it is not copied into the archive.
-Check SDK detection and events in the portal preview before submitting to QA.
-Complete RIGHTS.md owner checks and use only support/orientation settings tested
-on real devices. This script does not submit to QA or accept publishing terms.
+BUILD / SUBMIT
+node build.cjs
+Upload release/crucevia-crazygames.zip, not the repository or README.
+The ZIP has six root files: index.html, platform.js, campaign.js, game.js,
+privacy.html and NOTICE.txt. The official SDK remains externally hosted.
+Activate Progress Save, then check SDK detection and saving in portal preview.
+No automatic QA submission, publishing terms acceptance or exclusivity choice.
+
+RIGHTS
+See RIGHTS.md for the source/asset inventory and unresolved initial authorship
+and trademark checks. NOTICE.txt grants no open-source license.
+Do not claim worldwide uniqueness, trademark clearance or human-only authorship.
