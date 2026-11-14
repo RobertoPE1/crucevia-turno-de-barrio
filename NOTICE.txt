@@ -1,0 +1,10 @@
+CRUCEVIA — NEIGHBORHOOD SHIFT
+
+No open-source license is granted with this distribution. Applicable rights
+remain with their respective holders. This notice does not establish authorship
+or trademark registration. The project's provenance review is in RIGHTS.md.
+
+The CrazyGames SDK is supplied separately by CrazyGames from its official domain.
+It is not authored or owned by this project and is governed by its own terms.
+No third-party image, sound or font files are bundled.
+

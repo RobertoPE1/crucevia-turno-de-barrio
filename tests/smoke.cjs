@@ -16,7 +16,8 @@ function boot(blockStorage = false) {
     elements[id] = { textContent: '', classList: { add(){}, remove(){}, toggle(){} } };
   }
   elements.game.getContext = () => new Proxy({}, { get: () => () => {} });
-  const context = { document: { getElementById: id => elements[id] },
+  const events=[]; const listeners={};
+  const context = { window:{CruceviaPlatform:{setPlaying: value=>events.push(value)}}, document: { hidden:false, addEventListener:(name,fn)=>listeners[name]=fn,getElementById: id => elements[id] },
     localStorage: { getItem(){ if(blockStorage) throw Error('blocked'); return 'broken'; },
       setItem(){ if(blockStorage) throw Error('blocked'); } },
     addEventListener(){}, requestAnimationFrame(){}, Math };
@@ -24,10 +25,10 @@ function boot(blockStorage = false) {
     'globalThis.test={reset,update,choose,draw,finish,snapshot:()=>({state,phase,score,lives,elapsed,record}),set:(s)=>{if(s.cars)cars=s.cars;if(s.ped)ped=s.ped;if(s.elapsed!==undefined)elapsed=s.elapsed;}};ui();requestAnimationFrame(loop)})();');
   assert.notEqual(exposed, script);
   vm.runInNewContext(exposed, context);
-  return { api: context.test, elements };
+  return { api: context.test, elements, events, listeners, context };
 }
 for (const blocked of [false, true]) {
-  const {api, elements:e} = boot(blocked);
+  const {api, elements:e, events, listeners,context} = boot(blocked);
   assert.equal(api.snapshot().record, 0);
   e.start.onclick();
   e.pause.onclick();
@@ -37,6 +38,11 @@ for (const blocked of [false, true]) {
   api.draw();
   e.pause.onclick();
   assert.equal(e.pause.textContent, 'Pause');
+  assert.deepEqual(events,[true,false,true]);
+  context.document.hidden=true;listeners.visibilitychange();
+  assert.equal(api.snapshot().state,'pause');
+  e.pause.onclick();assert.equal(api.snapshot().state,'pause');
+  context.document.hidden=false;e.pause.onclick();
   assert.equal(api.snapshot().elapsed, before);
   e.ew.onclick(); assert.equal(api.snapshot().phase, 'ew');
   e.walk.onclick(); assert.equal(api.snapshot().phase, 'walk');
