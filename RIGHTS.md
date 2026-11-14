@@ -32,6 +32,13 @@ generados con IA; su protección depende de la ley y de la aportación humana.
 
 ## Identidad del juego
 
+Materiales de presentación (15 de noviembre de 2026): las portadas se componen
+con geometría dibujada mediante tools/marketing-art.js, manteniendo la estética
+del juego; no se importan imágenes de terceros. La tipografía usa fuentes del
+sistema, sin redistribuir archivos tipográficos. Los vídeos se renderizan desde
+la simulación y arte reales del juego, con composición de interfaz adaptada al
+formato y sin sonido. Herramientas y textos preparados con asistencia de IA.
+
 La ampliación de campaña añade ocho distritos, objetivos propios, estrellas,
 desbloqueos y guardados en campaign.js/game.js, escritos para este proyecto con
 asistencia de IA. Los escenarios de mercado, escuela, clínica, estación, festival,

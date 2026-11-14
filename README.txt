@@ -72,6 +72,12 @@ Activate Progress Save, then check SDK detection and saving in portal preview.
 No automatic QA submission, publishing terms acceptance or exclusivity choice.
 
 RIGHTS
+Submission copy and cover/video upload mapping: see SUBMISSION.md.
+Generate marketing assets: node tools/export-marketing.cjs
+Verify dimensions, playback, duration and silent tracks:
+node tools/export-marketing.cjs --verify
+Marketing files are separate from the game ZIP and never included in it.
+
 See RIGHTS.md for the source/asset inventory and unresolved initial authorship
 and trademark checks. NOTICE.txt grants no open-source license.
 Do not claim worldwide uniqueness, trademark clearance or human-only authorship.
